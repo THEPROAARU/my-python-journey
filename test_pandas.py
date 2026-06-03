@@ -1,12 +1,23 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
-# Create a simple dataset of your study tracking
+# Your study data
 data = {
     "Day": ["Monday", "Tuesday", "Wednesday"],
     "Minutes_Coded": [30, 30, 45],
-    "Topic": ["Pandas Intro", "Git Setup", "Local Test"]
+    "Topic": ["Pandas Intro", "Git Setup", "Data Viz"]
 }
 
+# Create the DataFrame
 df = pd.DataFrame(data)
-print("My Progress So Far:")
-print(df)
+
+# Create a bar graph
+plt.bar(df["Day"], df["Minutes_Coded"], color="skyblue", edgecolor="black")
+
+# Add labels and a title
+plt.xlabel("Days of the Week")
+plt.ylabel("Minutes Spent Coding")
+plt.title("My Daily Coding Progress")
+
+# Display the graph on your screen
+plt.show()
