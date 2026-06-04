@@ -16,7 +16,7 @@ print(f"\n🧠 Generating a custom quiz on '{topic}' using Gemini...")
 # Request the model to build a structured quiz
 response = client.models.generate_content(
     model="gemini-2.5-flash",
-    contents=f"Create a 3-question multiple choice quiz about {topic} suitable for a 9th grader. Provide the correct answers at the very bottom."
+    contents=f"Create a 10-question multiple choice quiz about {topic} suitable for a 9th grader. Provide the correct answers at the very bottom."
 )
 
 print("\n--- YOUR CUSTOM QUIZ ---")
