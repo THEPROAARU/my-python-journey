@@ -25,7 +25,7 @@ print(f"\n🧠 Gemini is building your game data for '{topic}'...")
 
 response = client.models.generate_content(
     model='gemini-2.5-flash',
-    contents=f"Create a 10-question multiple choice quiz about {topic} suitable for a 9th grader.",
+    contents=f"Create a 10-question multiple choice quiz about {topic} suitable for a 9th grader. Ensure the correct_option field clearly contains the letter or full string of the right choice.",
     config={
         'response_mime_type': 'application/json',
         'response_schema': Quiz,
@@ -35,9 +35,9 @@ response = client.models.generate_content(
 quiz_data = Quiz.model_validate_json(response.text)
 
 # --- THE GAME LOOP ---
-print("\n🎮 GAME START! Answer by typing A, B, C, or D.\n" + "="*100)
+print("\n🎮 GAME START! Answer by typing A, B, C, or D.\n" + "="*30)
 score = 0
-wrong_questions = [] # List to hold questions you missed
+wrong_questions = []
 
 for i, q in enumerate(quiz_data.questions, 1):
     print(f"\n📋 Question {i}: {q.question_text}")
@@ -46,19 +46,19 @@ for i, q in enumerate(quiz_data.questions, 1):
         
     user_answer = input("Your Answer: ").strip().upper()
     
-    if user_answer == q.correct_option.upper():
+    # FIX: Check if user input matches the first character or is contained within the correct string
+    if user_answer and (user_answer == q.correct_option[0].upper() or user_answer in q.correct_option.upper()):
         print("✅ Correct! Brilliant job.")
         score += 1
     else:
         print(f"❌ Incorrect. The right answer was {q.correct_option}.")
-        # Record the missed question details
         wrong_questions.append({
             'question': q.question_text,
             'options': q.options,
             'correct': q.correct_option
         })
 
-print("\n" + "="*100)
+print("\n" + "="*30)
 print(f"🏁 GAME OVER! Final Score: {score}/10")
 
 # --- SAVE SCORECARD ---
@@ -67,10 +67,9 @@ with open(filename, "w", encoding="utf-8") as file:
     file.write(f"Quiz Performance Tracking\nTopic: {topic}\nScore: {score}/10\n")
 print(f"💾 Scorecard saved locally as: {filename}")
 
-# --- NEW FEATURE: SAVE REVIEW SHEET IF YOU MISSED ANY ---
+# --- SAVE REVIEW SHEET ---
 if wrong_questions:
     review_file = "needs_review.txt"
-    # 'a' mode means APPEND so it adds to the file instead of overwriting old mistakes!
     with open(review_file, "a", encoding="utf-8") as file:
         file.write(f"\n=== Review Study Guide: {topic.upper()} ===\n")
         for w in wrong_questions:
