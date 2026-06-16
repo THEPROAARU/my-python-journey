@@ -10,7 +10,7 @@ data = {
 }
 
 # Create the DataFrame
-df = pd.DataFrame(data)
+df = pd.DataFrame(data) 
 
 # Create a bar graph
 plt.bar(df["Day"], df["Minutes_Coded"], color="skyblue", edgecolor="black")
