@@ -26,3 +26,19 @@ high_scorers = df[score_filter]
 
 print("🏆 STEP 2: The filtered data (Score > 150):")
 print(high_scorers)
+# 4. SORTING DATA
+# We want to rank scores from HIGHEST to LOWEST
+# ascending=False means go backwards (highest first)
+sorted_df = df.sort_values(by='Score', ascending=False)
+
+print("🏆 1. SORTED BY HIGHEST SCORE:")
+print(sorted_df)
+print("-" * 50)
+
+# 5. GROUPING DATA (The part that makes Kaggle look tough)
+# We want to see the AVERAGE score for each game type
+# .groupby('Game') bundles matching games together, and ['Score'].mean() finds the average
+game_stats = df.groupby('Game')['Score'].mean()
+
+print("🎮 2. AVERAGE SCORE BY GAME TYPE:")
+print(game_stats)
